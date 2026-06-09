@@ -1,26 +1,290 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
+/* ─────────────────────────────────────
+   FONTS
+───────────────────────────────────── */
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --font-inter: "Inter", sans-serif;
+    --font-syne: "Syne", sans-serif;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    font-family: var(--font-inter);
+    background-color: #05050a;
+    color: #ffffff;
+    min-height: 100dvh;
+  }
+
+  /* Focus ring — visible for keyboard users, hidden for mouse */
+  :focus-visible {
+    outline: 2px solid #7c3aed;
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+
+  /* Remove default button styles */
+  button {
+    cursor: pointer;
+  }
+
+  /* Scrollbar — dark theme */
+  ::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 99px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  /* Selection */
+  ::selection {
+    background: rgba(124, 58, 237, 0.35);
+    color: #ffffff;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* ─────────────────────────────────────
+   TYPOGRAPHY UTILITIES
+───────────────────────────────────── */
+@layer utilities {
+  .font-display {
+    font-family: var(--font-syne), sans-serif;
+  }
+
+  /* Gradient text */
+  .text-gradient-violet {
+    background: linear-gradient(135deg, #a78bfa 0%, #7c3aed 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .text-gradient-cyan {
+    background: linear-gradient(135deg, #67e8f9 0%, #0891b2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Shimmer headline effect */
+  .shimmer-text {
+    background: linear-gradient(
+      90deg,
+      #ffffff 25%,
+      #a78bfa 45%,
+      #67e8f9 55%,
+      #ffffff 75%
+    );
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: shimmer 4s linear infinite;
+  }
+}
+
+/* ─────────────────────────────────────
+   COMPONENT UTILITIES
+───────────────────────────────────── */
+@layer components {
+
+  /* Glass card */
+  .glass-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 1rem;
+  }
+
+  .glass-card:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.14);
+  }
+
+  /* Violet glow button */
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2;
+    @apply bg-violet-600 hover:bg-violet-500 active:scale-95;
+    @apply text-white font-semibold rounded-full;
+    @apply transition-all duration-200;
+    @apply shadow-lg shadow-violet-900/40 hover:shadow-violet-700/50;
+  }
+
+  /* Ghost / outline button */
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2;
+    @apply border border-white/15 hover:border-white/30;
+    @apply text-white/70 hover:text-white;
+    @apply rounded-full font-medium;
+    @apply transition-all duration-200;
+  }
+
+  /* Pill badge */
+  .pill {
+    @apply inline-flex items-center gap-1.5 px-3 py-1 rounded-full;
+    @apply border border-white/10 bg-white/5;
+    @apply text-xs font-medium text-white/60;
+  }
+
+  /* Nav link */
+  .nav-link {
+    @apply text-sm text-white/50 hover:text-white transition-colors duration-150;
+  }
+
+  /* Section heading pattern */
+  .section-eyebrow {
+    @apply text-xs font-medium uppercase tracking-widest mb-3;
+  }
+
+  .section-title {
+    @apply font-display text-3xl md:text-4xl font-bold tracking-tight;
+  }
+
+  /* Voxa waveform bar base */
+  .wave-bar {
+    border-radius: 9999px;
+    transition: height 0.3s ease, opacity 0.3s ease;
+  }
+}
+
+/* ─────────────────────────────────────
+   GLOBAL KEYFRAMES
+───────────────────────────────────── */
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position:  200% center; }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.93); }
+  to   { opacity: 1; transform: scale(1);    }
+}
+
+@keyframes waveBar {
+  from { transform: scaleY(0.3); opacity: 0.5; }
+  to   { transform: scaleY(1);   opacity: 1;   }
+}
+
+@keyframes pulseRing {
+  0%   { transform: scale(0.95); opacity: 0.5; }
+  100% { transform: scale(1.45); opacity: 0;   }
+}
+
+@keyframes floatBadge {
+  from { transform: translateY(0px);  }
+  to   { transform: translateY(-6px); }
+}
+
+@keyframes dotBounce {
+  0%, 100% { transform: translateY(0);    opacity: 0.35; }
+  50%       { transform: translateY(-7px); opacity: 1;    }
+}
+
+@keyframes spinSlow {
+  from { transform: rotate(0deg);   }
+  to   { transform: rotate(360deg); }
+}
+
+/* ─────────────────────────────────────
+   ANIMATION UTILITY CLASSES
+───────────────────────────────────── */
+@layer utilities {
+  .animate-fade-up {
+    animation: fadeUp 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .animate-scale-in {
+    animation: scaleIn 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .animate-spin-slow {
+    animation: spinSlow 3s linear infinite;
+  }
+
+  /* Stagger helpers — use with style={{ animationDelay }} in JSX */
+  .delay-75  { animation-delay: 75ms;  }
+  .delay-150 { animation-delay: 150ms; }
+  .delay-225 { animation-delay: 225ms; }
+  .delay-300 { animation-delay: 300ms; }
+  .delay-450 { animation-delay: 450ms; }
+  .delay-600 { animation-delay: 600ms; }
+}
+
+/* ─────────────────────────────────────
+   REDUCED MOTION
+───────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .shimmer-text {
+    animation: none;
+    background: #a78bfa;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+}
+
+/* ─────────────────────────────────────
+   LAYOUT HELPERS
+───────────────────────────────────── */
+@layer utilities {
+  /* Full viewport height respecting mobile browser chrome */
+  .min-h-screen-dvh {
+    min-height: 100dvh;
+  }
+
+  /* Glow blobs */
+  .glow-violet {
+    background: radial-gradient(ellipse, rgba(124, 58, 237, 0.22) 0%, transparent 70%);
+    filter: blur(80px);
+    pointer-events: none;
+  }
+
+  .glow-cyan {
+    background: radial-gradient(ellipse, rgba(6, 182, 212, 0.15) 0%, transparent 70%);
+    filter: blur(80px);
+    pointer-events: none;
+  }
+
+  .glow-emerald {
+    background: radial-gradient(ellipse, rgba(16, 185, 129, 0.12) 0%, transparent 70%);
+    filter: blur(80px);
+    pointer-events: none;
+  }
+
+  /* Text balance for headings */
+  .text-balance {
+    text-wrap: balance;
+  }
 }
